@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import SiteNav from '@/components/SiteNav';
 import CollectionGrid from '@/components/CollectionGrid';
+import Mandala from '@/components/Mandala';
 
 export const metadata: Metadata = {
   title: 'The Collection',
@@ -11,7 +12,8 @@ export default function Collection() {
   return (
     <>
       <SiteNav current="collection" />
-      <main className="page">
+      <main className="page has-mandala">
+        <Mandala className="page-mandala" />
         <p className="label">Complete archive</p>
         <h1 className="page-title">The Collection</h1>
         <CollectionGrid />

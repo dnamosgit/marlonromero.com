@@ -35,7 +35,7 @@ export const ARTWORKS: Artwork[] = [
   { id: 'l3', category: 'landscapes', src: '', w: 1600, h: 1200 },
   { id: 'l4', category: 'landscapes', src: '', w: 1800, h: 900 },
   { id: 'l5', category: 'landscapes', src: '', w: 1200, h: 1200 },
-  { id: 'v1', category: 'visionary', src: '', w: 1200, h: 1600 },
+  { id: 'v1', category: 'visionary', src: '/art/visionary-01.jpg', w: 1024, h: 770 }, // real painting; title and details PENDING
   { id: 'v2', category: 'visionary', src: '', w: 1600, h: 1100 },
   { id: 'v3', category: 'visionary', src: '', w: 1300, h: 1300 },
   { id: 'v4', category: 'visionary', src: '', w: 1100, h: 1500 },
@@ -52,7 +52,7 @@ export const ARTWORKS: Artwork[] = [
 
 export const SITE = {
   url: 'https://www.marlonromero.com',
-  openingArt: 'l4',                // painting revealed in the opening
+  openingArt: 'v1',                // painting revealed in the opening
   /* PENDING — verified contact details from the original site. */
   contact: { email: '', instagram: '', facebook: '' },
 };
@@ -70,36 +70,40 @@ export type World = {
   bg: string;    // environment colour
   glow: string;  // light behind and beneath the paintings
   mote: string;  // particle colour
+  mote2: string; // second particle colour (a minority of particles)
   layout: { spacing: number; x: number; angle: number; height: number; bob: number; sway: number };
   motes: { rise: number; drift: number; size: number; twinkle: number };
 };
 
+/* Colours are sampled from the artist's visionary painting (public/art/visionary-01.jpg):
+   night indigo #100e1c · leaf #5aaf3e · lime #a8c73d · sunset amber #a97d2d · ember #b15426 ·
+   clay #86553b · river blue #1876af · violet orb #4a3775 / #5b508d. */
 export const WORLDS: World[] = [
   {
     key: 'origin', numeral: 'I', name: 'The Origin', category: 'landscapes',
     line: 'Landscapes of the Amazon rainforest',
-    bg: '#050806', glow: '#3f6140', mote: '#e6cc7e',
+    bg: '#060b08', glow: '#2f7a38', mote: '#a8c73d', mote2: '#d9a23a',
     layout: { spacing: 9, x: 3.4, angle: 0.55, height: 3.4, bob: 0, sway: 0.55 },
     motes: { rise: 0.02, drift: 0.55, size: 1, twinkle: 1 },
   },
   {
     key: 'vision', numeral: 'II', name: 'The Vision', category: 'visionary',
     line: 'Visionary paintings',
-    bg: '#07050c', glow: '#553c78', mote: '#bca6ea',
+    bg: '#0a0814', glow: '#4a3775', mote: '#8d7fd0', mote2: '#7fd04e',
     layout: { spacing: 10, x: 2.7, angle: 0.36, height: 3.7, bob: 0.22, sway: 1.1 },
-    motes: { rise: 0.28, drift: 0.85, size: 1.25, twinkle: 0.45 },
+    motes: { rise: 0.28, drift: 0.85, size: 1.5, twinkle: 0.45 },
   },
   {
     key: 'observation', numeral: 'III', name: 'The Observation', category: 'still-life',
     line: 'Still life',
-    bg: '#0a0806', glow: '#7a5429', mote: '#f1dfb6',
+    bg: '#0c0807', glow: '#86553b', mote: '#e0a94a', mote2: '#d0612c',
     layout: { spacing: 6, x: 2.2, angle: 0.7, height: 2.1, bob: 0, sway: 0.2 },
     motes: { rise: -0.03, drift: 0.16, size: 0.6, twinkle: 0.1 },
   },
   {
     key: 'expansion', numeral: 'IV', name: 'The Expansion', category: 'murals',
     line: 'Murals',
-    bg: '#04060a', glow: '#2f4a63', mote: '#d2dbe3',
+    bg: '#050912', glow: '#1876af', mote: '#9cc7e6', mote2: '#8d7fd0',
     layout: { spacing: 18, x: 7.2, angle: 0.5, height: 7.5, bob: 0, sway: 0.8 },
     motes: { rise: 0.012, drift: 0.3, size: 1.8, twinkle: 0.2 },
   },

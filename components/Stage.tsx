@@ -28,9 +28,10 @@ function Backdrop({ color }: { color: string }) {
 }
 
 /* ---------- Particles: fireflies, rising embers, dust or slow snow, by world ---------- */
-function Motes({ cfg, color, count }: { cfg: World['motes']; color: string; count: number }) {
+function Motes({ cfg, color, color2, count }: { cfg: World['motes']; color: string; color2: string; count: number }) {
   const mat = useRef<THREE.ShaderMaterial>(null!);
   const target = useMemo(() => new THREE.Color(color), [color]);
+  const target2 = useMemo(() => new THREE.Color(color2), [color2]);
   const geo = useMemo(() => {
     const g = new THREE.BufferGeometry(), p = new Float32Array(count * 3), s = new Float32Array(count * 4);
     for (let i = 0; i < count; i++) {
@@ -42,14 +43,14 @@ function Motes({ cfg, color, count }: { cfg: World['motes']; color: string; coun
     return g;
   }, [count]);
   const uniforms = useMemo(() => ({
-    uTime: { value: 0 }, uCamZ: { value: 0 }, uPx: { value: 6 }, uColor: { value: new THREE.Color(color) },
+    uTime: { value: 0 }, uCamZ: { value: 0 }, uPx: { value: 6 }, uColor: { value: new THREE.Color(color) }, uColor2: { value: new THREE.Color(color2) },
     uRise: { value: cfg.rise }, uDrift: { value: cfg.drift }, uSize: { value: cfg.size }, uTwinkle: { value: cfg.twinkle },
   }), []); // eslint-disable-line react-hooks/exhaustive-deps
   useFrame((s, dt) => {
     const u = mat.current.uniforms, k = 1 - Math.exp(-dt * 1.5);
     u.uTime.value = s.clock.elapsedTime; u.uCamZ.value = s.camera.position.z;
     u.uPx.value = (s.size.height * s.viewport.dpr) / 150;
-    (u.uColor.value as THREE.Color).lerp(target, k);
+    (u.uColor.value as THREE.Color).lerp(target, k); (u.uColor2.value as THREE.Color).lerp(target2, k);
     u.uRise.value += (cfg.rise - u.uRise.value) * k; u.uDrift.value += (cfg.drift - u.uDrift.value) * k;
     u.uSize.value += (cfg.size - u.uSize.value) * k; u.uTwinkle.value += (cfg.twinkle - u.uTwinkle.value) * k;
   });
@@ -57,8 +58,9 @@ function Motes({ cfg, color, count }: { cfg: World['motes']; color: string; coun
     <points geometry={geo} frustumCulled={false}>
       <shaderMaterial ref={mat} uniforms={uniforms} transparent depthWrite={false} blending={THREE.AdditiveBlending}
         vertexShader={/* glsl */ `
-          attribute vec4 aSeed; uniform float uTime, uCamZ, uRise, uDrift, uSize, uTwinkle, uPx; varying float vA;
+          attribute vec4 aSeed; uniform float uTime, uCamZ, uRise, uDrift, uSize, uTwinkle, uPx; varying float vA; varying float vMix;
           void main(){
+            vMix = step(.68, aSeed.w);
             vec3 p = position;
             p.y = mod(p.y + uTime * uRise * (.5 + aSeed.x), 9.) - .8;
             p.x += sin(uTime * .2 * (.5 + aSeed.y) + aSeed.z * 6.28) * uDrift;
@@ -71,8 +73,8 @@ function Motes({ cfg, color, count }: { cfg: World['motes']; color: string; coun
             gl_PointSize = uSize * uPx * (2. + 6. * aSeed.x) / max(-mv.z, .5);
           }`}
         fragmentShader={/* glsl */ `
-          uniform vec3 uColor; varying float vA;
-          void main(){ float a = smoothstep(.5, 0., length(gl_PointCoord - .5)); gl_FragColor = vec4(uColor, a * a * vA * .85); }`}
+          uniform vec3 uColor, uColor2; varying float vA; varying float vMix;
+          void main(){ float a = smoothstep(.5, 0., length(gl_PointCoord - .5)); gl_FragColor = vec4(mix(uColor, uColor2, vMix), a * a * vA * .85); }`}
       />
     </points>
   );
@@ -239,7 +241,7 @@ function Veil({ api }: { api: MutableRefObject<VeilApi | null> }) {
             if (r > 1.) c.y /= r; else c.x *= r;
             vec2 flow = vec2(fbm(q * 1.5 + uTime * .08), fbm(q * 1.5 - uTime * .07 + 7.)) - .5;
             vec3 col = mix(uTint * (.6 + n), texture2D(uTex, .5 + c * uZoom + flow * .14 * (1.2 - uZoom)).rgb, uHas);
-            col += (a - smoothstep(.06, .3, e)) * vec3(.055, .04, .018);                       // warm light on the advancing edge
+            col += (a - smoothstep(.06, .3, e)) * vec3(.075, .05, .012);                       // warm light on the advancing edge
             gl_FragColor = vec4(col, a);
             #include <colorspace_fragment>
           }`}
@@ -264,7 +266,7 @@ export default function Stage({ world, arts, rig, onSelect, mobile, hub, handle 
       gl={{ antialias: !mobile, powerPreference: 'high-performance' }} aria-hidden>
       <Lens />
       <Backdrop color={env.bg} />
-      <Motes cfg={env.motes} color={env.mote} count={mobile ? 320 : 900} />
+      <Motes cfg={env.motes} color={env.mote} color2={env.mote2} count={mobile ? 320 : 900} />
       {world ? <WorldScene key={world.key} world={world} arts={arts} rig={rig} onSelect={onSelect} /> : <HubCamera rig={rig} />}
       <Veil api={api} />
     </Canvas>

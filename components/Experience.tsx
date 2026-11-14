@@ -9,6 +9,7 @@ import { fitWorld, isPortrait, nearestIndex, pathLength, progressFor } from '@/l
 import type { Rig, StageHandle } from './Stage';
 import ArtImage from './ArtImage';
 import Inspector from './Inspector';
+import Mandala from './Mandala';
 
 const Stage = dynamic(() => import('./Stage'), { ssr: false }); // WebGL is fetched separately, never in the first load
 
@@ -168,6 +169,7 @@ export default function Experience() {
           <div className="opening-text">
             <h1>Marlon Romero Gomez</h1>
             <p className="opening-sub">The Worlds Within</p>
+            <span className="beads" aria-hidden />
             <button type="button" className="enter" onClick={enter} autoFocus>Enter experience</button>
             <Link className="skip-intro" href="/collection/">Skip — go to the collection</Link>
           </div>
@@ -194,6 +196,8 @@ export default function Experience() {
       {/* ---------- Gateways ---------- */}
       {phase === 'hub' && (
         <section className="hub" aria-label="Choose a world">
+          <Mandala className="hub-mandala" />
+          <span className="orb o1" aria-hidden /><span className="orb o2" aria-hidden /><span className="orb o3" aria-hidden />
           <p className="label hub-title">The Worlds Within</p>
           <div className="portals">
             {WORLDS.map((w, i) => {

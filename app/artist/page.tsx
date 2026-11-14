@@ -3,6 +3,7 @@ import Link from 'next/link';
 import SiteNav from '@/components/SiteNav';
 import ArtImage from '@/components/ArtImage';
 import Reveal from '@/components/Reveal';
+import Mandala from '@/components/Mandala';
 import { CHAPTERS, SITE, artById } from '@/lib/data';
 
 export const metadata: Metadata = {
@@ -17,6 +18,7 @@ export default function Artist() {
       <SiteNav current="artist" />
       <main className="story">
         <section className="chapter intro">
+          <Mandala className="page-mandala" />
           <Reveal>
             <p className="label">The Artist</p>
             <h1>Marlon Romero <em>Gomez</em></h1>
@@ -33,6 +35,7 @@ export default function Artist() {
               <Reveal className="chapter-text">
                 <p className="chapter-num">{ch.numeral}</p>
                 <h2>{ch.title}</h2>
+                <span className="beads" aria-hidden />
                 <p>{ch.text}</p>
               </Reveal>
             </section>

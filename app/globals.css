@@ -1,12 +1,14 @@
 /* ---------- Design system ---------- */
 :root {
-  --bg: #070807;
-  --bg-2: #101110;
+  /* Sampled from the artist's visionary painting */
+  --night: #100e1c; --leaf: #5aaf3e; --lime: #a8c73d; --amber: #a97d2d; --ember: #b15426; --clay: #86553b; --river: #1876af; --violet: #4a3775; --violet-hi: #5b508d;
+  --bg: #0a0912;
+  --bg-2: #14111d;
   --line: rgba(236, 230, 216, .13);
   --ivory: #ece6d8;
   --soft: #bdb6a6;
   --muted: #837e72;
-  --gold: #b3935c;
+  --gold: #d9a23a; /* sunset amber, lifted for legibility on the night ground */
   --serif: 'Cormorant Garamond', 'Cormorant', Garamond, 'Times New Roman', serif;
   --sans: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --gutter: clamp(20px, 4.5vw, 72px);
@@ -25,7 +27,7 @@ a { color: inherit; text-decoration: none; }
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
 h1, h2, h3 { font-family: var(--serif); font-weight: 300; margin: 0; }
 :focus-visible { outline: 1px solid var(--gold); outline-offset: 5px; }
-::selection { background: var(--gold); color: #000; }
+::selection { background: var(--ember); color: #fff; }
 .label { font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: var(--muted); margin: 0; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; margin: 0; padding: 0; list-style: none; }
 .sr-only:focus-within { position: fixed; z-index: 90; left: 16px; top: 70px; width: auto; height: auto; clip-path: none; background: #000; padding: 12px 16px; }
@@ -43,7 +45,7 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 300; margin: 0; }
 .noscript { position: fixed; inset: 0; z-index: 99; background: var(--bg); display: grid; place-content: center; text-align: center; padding: 24px; gap: 12px; }
 
 /* ---------- Experience shell ---------- */
-.xp { position: fixed; inset: 0; overflow: hidden; overscroll-behavior: contain; -webkit-tap-highlight-color: transparent; background: #050806; touch-action: none; user-select: none; -webkit-user-select: none; }
+.xp { position: fixed; inset: 0; overflow: hidden; overscroll-behavior: contain; -webkit-tap-highlight-color: transparent; background: #07060d; touch-action: none; user-select: none; -webkit-user-select: none; }
 .xp-canvas { position: absolute; inset: 0; }
 .xp-canvas canvas { display: block; }
 .chrome { transition: opacity 1.2s var(--ease); }
@@ -135,7 +137,7 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 300; margin: 0; }
 .inspector-btns button:hover { color: var(--ivory); }
 
 /* ---------- Standard pages ---------- */
-.site-nav { position: sticky; top: 0; z-index: 40; display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: calc(18px + var(--sat)) var(--gr) 18px var(--gl); background: rgba(7, 8, 7, .78); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+.site-nav { position: sticky; top: 0; z-index: 40; display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: calc(18px + var(--sat)) var(--gr) 18px var(--gl); background: rgba(10, 9, 18, .8); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
 .brand { font-family: var(--serif); font-size: 19px; letter-spacing: .22em; text-transform: uppercase; white-space: nowrap; }
 .site-nav nav { display: flex; gap: clamp(16px, 3vw, 44px); }
 .site-nav nav a { font-size: 11px; letter-spacing: .26em; text-transform: uppercase; color: var(--soft); padding: 6px 0; border-bottom: 1px solid transparent; transition: color .4s, border-color .4s; white-space: nowrap; }
@@ -274,3 +276,60 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 300; margin: 0; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
   .reveal { opacity: 1; transform: none; }
 }
+
+/* ---------- Motifs drawn from the paintings' vocabulary: beadwork, star-flowers, orbs, sunset ---------- */
+.beads { display: block; height: 6px; width: min(100%, 196px); margin: 22px 0;
+  background:
+    radial-gradient(circle, var(--lime) 0 1.6px, transparent 2.1px) 7px 0 / 28px 6px repeat-x,
+    radial-gradient(circle, var(--gold) 0 2.4px, transparent 2.9px) 0 0 / 28px 6px repeat-x,
+    radial-gradient(circle, var(--ember) 0 1.6px, transparent 2.1px) 14px 0 / 28px 6px repeat-x,
+    radial-gradient(circle, var(--violet-hi) 0 1.6px, transparent 2.1px) 21px 0 / 28px 6px repeat-x; }
+.opening-text .beads { margin: 26px auto 0; animation-delay: 2.9s; }
+.opening-text .enter { margin-top: clamp(26px, 5vh, 52px); }
+
+.mandala { overflow: visible; }
+.mandala .m-a { stroke: var(--lime); } .mandala .m-b { stroke: var(--gold); } .mandala .m-c { stroke: var(--river); }
+.mandala .d-a { fill: var(--gold); } .mandala .d-b { fill: var(--ember); } .mandala .d-c { fill: var(--violet-hi); }
+.mandala path, .mandala ellipse, .mandala rect, .mandala line, .mandala circle { vector-effect: non-scaling-stroke; }
+@keyframes turn { to { transform: rotate(360deg); } }
+.hub-mandala { position: absolute; left: 50%; top: 50%; width: min(120vh, 135vw); margin: calc(min(120vh, 135vw) / -2) 0 0 calc(min(120vh, 135vw) / -2); opacity: .16; animation: turn 240s linear infinite; pointer-events: none; }
+.page-mandala { position: absolute; width: clamp(260px, 42vw, 620px); right: -8%; top: -6%; opacity: .2; animation: turn 300s linear infinite; pointer-events: none; z-index: 0; }
+.has-mandala { position: relative; overflow: hidden; } .has-mandala > :not(.page-mandala) { position: relative; z-index: 1; }
+.chapter.intro .page-mandala { right: auto; left: 50%; top: 50%; width: min(96vh, 120vw); margin: calc(min(96vh, 120vw) / -2) 0 0 calc(min(96vh, 120vw) / -2); opacity: .14; }
+.chapter.intro .reveal { position: relative; }
+
+.orb { position: absolute; border-radius: 50%; pointer-events: none; background: radial-gradient(circle at 34% 30%, #9488cf, var(--violet-hi) 28%, var(--violet) 55%, #1b1533 100%); box-shadow: 0 0 40px -6px var(--violet); opacity: .8; transition: transform 1.6s var(--ease); animation: float 11s ease-in-out infinite alternate; }
+.orb.o1 { width: 46px; height: 46px; left: 9%; top: 24%; --k: 14px; }
+.orb.o2 { width: 22px; height: 22px; right: 12%; top: 16%; --k: -22px; animation-duration: 14s; }
+.orb.o3 { width: 64px; height: 64px; right: 7%; bottom: 14%; --k: 9px; animation-duration: 17s; }
+@keyframes float { from { translate: calc(var(--mx) * var(--k)) 0; } to { translate: calc(var(--mx) * var(--k)) -18px; } }
+
+/* Gateways wear a beaded outline and a sunset horizon */
+.portal-arch::before { content: ''; position: absolute; inset: 7px; z-index: 2; border-radius: inherit; border: 2px dotted color-mix(in srgb, var(--mote) 70%, transparent); opacity: .55; transition: opacity 1s var(--ease); pointer-events: none; }
+.portal:hover .portal-arch::before, .portal:focus-visible .portal-arch::before { opacity: 1; }
+.portal-wash { opacity: .9; filter: blur(26px) saturate(1.25); }
+.portal-wash.empty { background: radial-gradient(70% 22% at 50% 62%, color-mix(in srgb, var(--mote) 55%, transparent), transparent 75%), radial-gradient(60% 45% at 50% 78%, var(--glow), transparent 72%), radial-gradient(26% 14% at 50% 30%, color-mix(in srgb, var(--violet-hi) 60%, transparent), transparent 75%); }
+.portal-num { color: var(--lime); }
+
+/* Sunset line: ember → amber → lime, as on the painting's horizon */
+.world-bar span { background: linear-gradient(90deg, var(--ember), var(--gold) 55%, var(--lime)); }
+.enter { border-color: color-mix(in srgb, var(--gold) 70%, transparent); }
+.enter:hover { background: linear-gradient(90deg, var(--ember), var(--gold)); color: #120d08; border-color: transparent; }
+.site-nav { border-bottom: 0; }
+.site-nav::after, .tabs::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; opacity: .55; pointer-events: none;
+  background: radial-gradient(circle, var(--gold) 0 1.2px, transparent 1.7px) 0 0 / 14px 3px repeat-x, radial-gradient(circle, var(--lime) 0 1px, transparent 1.5px) 7px 0 / 28px 3px repeat-x; }
+.tabs { position: relative; border-bottom-color: transparent; }
+.xp-menu small { color: var(--lime); }
+.xp-menu > *:hover, .xp-menu > [aria-current] { color: var(--gold); }
+.chapter-num { color: var(--lime); }
+h2 em, .chapter.intro h1 em { color: var(--gold); }
+.tabs sup { color: var(--lime); }
+.chapter-wash { opacity: .34; filter: blur(60px) saturate(1.2); }
+.text-link::after { color: var(--lime); }
+.ph { background: radial-gradient(90% 80% at 85% 90%, color-mix(in srgb, var(--violet) 60%, transparent), transparent 65%), #14121c; }
+
+@media (max-width: 720px) {
+  .orb.o1 { left: 2%; top: 10%; width: 28px; height: 28px; } .orb.o3 { width: 38px; height: 38px; right: 3%; bottom: 5%; } .orb.o2 { display: none; }
+  .hub-mandala { opacity: .12; } .page-mandala { opacity: .14; }
+}
+@media (prefers-reduced-motion: reduce) { .hub-mandala, .page-mandala, .orb { animation: none; } }
