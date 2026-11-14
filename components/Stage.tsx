@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import gsap from 'gsap';
 import { useEffect, useMemo, useRef, useState, type MutableRefObject } from 'react';
 import type { Artwork, World } from '@/lib/data';
-import { EYE, START_Z, fitDistance, pathLength, place, type Place } from '@/lib/layout';
+import { EYE, START_Z, fitDistance, fovFor, pathLength, place, type Place } from '@/lib/layout';
 import { artTexture, glowTexture } from '@/lib/textures';
 
 export type Rig = { target: number; focus: number; snap: boolean; mx: number; my: number };
@@ -158,6 +158,15 @@ function WorldScene({ world, arts, rig, onSelect }: { world: World; arts: Artwor
   return <>{arts.map((a, i) => <Painting key={a.id} art={a} pl={places[i]} index={i} world={world} rig={rig} onSelect={onSelect} />)}</>;
 }
 
+/* ---------- Lens follows the screen shape (rotation, split view, resize) ---------- */
+function Lens() {
+  useFrame((s) => {
+    const cam = s.camera as THREE.PerspectiveCamera, f = fovFor(s.size.width / s.size.height);
+    if (cam.fov !== f) { cam.fov = f; cam.updateProjectionMatrix(); }
+  });
+  return null;
+}
+
 function HubCamera({ rig }: { rig: MutableRefObject<Rig> }) {
   const look = useMemo(() => new THREE.Vector3(0, EYE, -8), []);
   useFrame((s, dt) => {
@@ -253,6 +262,7 @@ export default function Stage({ world, arts, rig, onSelect, mobile, hub, handle 
   return (
     <Canvas flat dpr={[1, mobile ? 1.5 : 2]} camera={{ fov: 50, near: 0.1, far: 140, position: [0, EYE, START_Z] }}
       gl={{ antialias: !mobile, powerPreference: 'high-performance' }} aria-hidden>
+      <Lens />
       <Backdrop color={env.bg} />
       <Motes cfg={env.motes} color={env.mote} count={mobile ? 320 : 900} />
       {world ? <WorldScene key={world.key} world={world} arts={arts} rig={rig} onSelect={onSelect} /> : <HubCamera rig={rig} />}

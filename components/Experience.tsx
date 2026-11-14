@@ -5,7 +5,7 @@ import Link from 'next/link';
 import gsap from 'gsap';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { WORLDS, artById, artMeta, artName, artsOf, worldByKey, SITE, type World } from '@/lib/data';
-import { nearestIndex, pathLength, progressFor } from '@/lib/layout';
+import { fitWorld, isPortrait, nearestIndex, pathLength, progressFor } from '@/lib/layout';
 import type { Rig, StageHandle } from './Stage';
 import ArtImage from './ArtImage';
 import Inspector from './Inspector';
@@ -24,12 +24,15 @@ export default function Experience() {
   const [menu, setMenu] = useState(false);
   const [inspect, setInspect] = useState(false);
   const [idle, setIdle] = useState(false);
+  const [portrait, setPortrait] = useState(false);
+  const portraitRef = useRef(false);
   const stage = useRef<StageHandle | null>(null);
   const rig = useRef<Rig>({ target: 0, focus: -1, snap: false, mx: 0, my: 0 });
   const opening = useRef<HTMLDivElement>(null);
   const bar = useRef<HTMLSpanElement>(null);
 
-  const world = worldByKey(worldKey);
+  const base = worldByKey(worldKey);
+  const world = useMemo(() => (base ? fitWorld(base, portrait) : null), [base, portrait]);
   const arts = useMemo(() => (world ? artsOf(world.category) : []), [world]);
   const art = focus >= 0 ? arts[focus] : null;
   const openingArt = artById(SITE.openingArt);
@@ -42,7 +45,7 @@ export default function Experience() {
 
   /* ---- state changes ---- */
   const show = useCallback((key: string | null, artId?: string | null) => {
-    const w = worldByKey(key), list = w ? artsOf(w.category) : [];
+    const raw = worldByKey(key), w = raw ? fitWorld(raw, portraitRef.current) : null, list = w ? artsOf(w.category) : [];
     const f = artId ? list.findIndex((a) => a.id === artId) : -1;
     rig.current.focus = f; rig.current.snap = true;
     setWorldKey(w ? w.key : null); setFocus(f); setPhase(w ? 'world' : 'hub'); setMenu(false); setInspect(false);
@@ -81,6 +84,8 @@ export default function Experience() {
     try { const c = document.createElement('canvas'); gl = !!(c.getContext('webgl2') || c.getContext('webgl')); } catch {}
     setLite(!gl || matchMedia('(prefers-reduced-motion: reduce)').matches);
     setMobile(matchMedia('(max-width: 820px), (pointer: coarse)').matches);
+    const shape = () => { const pt = isPortrait(innerWidth / innerHeight); portraitRef.current = pt; setPortrait(pt); };
+    shape(); addEventListener('resize', shape);
     const read = () => {
       const q = new URLSearchParams(location.search), w = q.get('w');
       let seen = false; try { seen = !!sessionStorage.getItem('entered'); } catch {}
@@ -88,7 +93,7 @@ export default function Experience() {
     };
     read();
     addEventListener('popstate', read);
-    return () => removeEventListener('popstate', read);
+    return () => { removeEventListener('popstate', read); removeEventListener('resize', shape); };
   }, [show]);
 
   /* ---- input: wheel / touch / keyboard / pointer ---- */

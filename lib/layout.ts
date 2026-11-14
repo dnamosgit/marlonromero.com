@@ -32,3 +32,13 @@ export function fitDistance(pl: Place, fovDeg: number, viewAspect: number) {
   const margin = viewAspect < 1 ? 1.12 : 1.3;
   return Math.max(pl.h / 2 / t, pl.w / 2 / (t * viewAspect)) * margin;
 }
+
+/** Portrait screens (phones, upright tablets) see a narrow slice of the world: bring the paintings in and scale them down. */
+export const isPortrait = (aspect: number) => aspect < 0.85;
+export function fitWorld(world: World, portrait: boolean): World {
+  if (!portrait) return world;
+  const L = world.layout;
+  return { ...world, layout: { ...L, height: L.height * 0.72, x: L.x * 0.5, spacing: L.spacing * 0.8, angle: L.angle * 0.8, sway: L.sway * 0.5 } };
+}
+/** A wider lens in portrait keeps both sides of the path in view. */
+export const fovFor = (aspect: number) => (isPortrait(aspect) ? 68 : 50);
