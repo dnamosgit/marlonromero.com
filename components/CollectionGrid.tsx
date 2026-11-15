@@ -28,7 +28,7 @@ export default function CollectionGrid() {
       <div className="masonry" key={filter}>
         {list.map((a) => (
           <figure key={a.id}>
-            <Link href={`/collection/${a.id}/`} className="tile" aria-label={`${artName(a)} — ${catLabel(a.category)}`}><ArtImage art={a} /></Link>
+            <Link href={`/collection/${a.id}/`} className="tile" aria-label={`${artName(a)} — ${catLabel(a.category)}`}><ArtImage art={a} sizes="(max-width: 520px) 100vw, (max-width: 1024px) 50vw, 33vw" /></Link>
             <figcaption><b>{artName(a)}</b><span>{[catLabel(a.category), a.year].filter(Boolean).join(' · ')}</span></figcaption>
           </figure>
         ))}

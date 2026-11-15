@@ -165,7 +165,7 @@ export default function Experience() {
       {/* ---------- Opening ---------- */}
       {phase === 'opening' && (
         <section className="opening" ref={opening} aria-label="Introduction">
-          <div className="opening-art">{openingArt?.src && <ArtImage art={openingArt} eager />}</div>
+          <div className="opening-art">{openingArt?.src && <ArtImage art={openingArt} eager sizes="90vw" />}</div>
           <div className="opening-text">
             <h1>Marlon Romero Gomez</h1>
             <p className="opening-sub">The Worlds Within</p>

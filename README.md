@@ -16,6 +16,16 @@ npm run build
 
 `npm run build` writes a static site to `out/` that any static host can serve.
 
+## Vercel
+
+Pushes to `main` deploy to production. On Vercel the site runs as a regular Next.js app (`vercel.json` pins the
+framework): paintings in the page are resized to the visitor's screen and served as AVIF/WebP, while zoom and the
+3D worlds always use the original file. Fonts are self-hosted. To reproduce the Vercel build locally:
+
+```bash
+npm run preview:vercel
+```
+
 ## Adding the real content
 
 Everything lives in **`lib/data.ts`**. Put the original, unmodified painting files in `public/art/` and fill in

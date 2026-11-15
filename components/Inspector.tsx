@@ -61,7 +61,7 @@ export default function Inspector({ art, onClose }: { art: Artwork; onClose: () 
   return (
     <div className="inspector" role="dialog" aria-modal="true" aria-label={`Inspecting ${artName(art)}`}>
       <div className="inspector-stage" ref={stage}>
-        <div className="inspector-inner" ref={inner}><ArtImage art={art} eager /></div>
+        <div className="inspector-inner" ref={inner}><ArtImage art={art} eager full /></div>
       </div>
       <div className="inspector-bar">
         <span className="label">Scroll or pinch to zoom · drag to move</span>
