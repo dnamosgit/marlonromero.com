@@ -56,15 +56,17 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 300; margin: 0; }
 .opening { position: absolute; inset: 0; z-index: 30; background: #020302; display: grid; place-items: center; }
 .opening-art { position: absolute; inset: 6svh 6vw; display: grid; place-items: center; opacity: 0; animation: emerge 7s var(--ease) .6s forwards; }
 .opening-art img { max-width: 100%; max-height: 88svh; width: auto; object-fit: contain; }
-.opening::after { content: ''; position: absolute; inset: 0; background: radial-gradient(70% 60% at 50% 50%, rgba(2, 3, 2, .25), rgba(2, 3, 2, .9)); pointer-events: none; }
-@keyframes emerge { from { opacity: 0; transform: scale(1.05); } to { opacity: .6; transform: none; } }
+.opening::after { content: ''; position: absolute; inset: 0; background: radial-gradient(46% 34% at 50% 50%, rgba(2, 3, 2, .62), rgba(2, 3, 2, .12) 70%, rgba(2, 3, 2, .5)); pointer-events: none; }
+.opening-text { text-shadow: 0 2px 28px rgba(0, 0, 0, .95), 0 0 6px rgba(0, 0, 0, .7); }
+.opening .enter { background: rgba(4, 4, 8, .55); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); text-shadow: none; }
+@keyframes emerge { from { opacity: 0; transform: scale(1.05); } to { opacity: .88; transform: none; } }
 .opening-text { position: relative; z-index: 2; text-align: center; padding: 0 var(--gutter); }
 .opening-text > * { opacity: 0; animation: rise 2.4s var(--ease) forwards; }
 .opening h1 { font-size: clamp(30px, 5.6vw, 92px); letter-spacing: .14em; text-transform: uppercase; line-height: 1.1; animation-delay: 1.4s; }
 .opening-sub { font-family: var(--serif); font-style: italic; font-size: clamp(20px, 2.4vw, 36px); color: var(--soft); margin: .5em 0 0; animation-delay: 2.4s; }
 .enter { display: inline-block; margin-top: clamp(40px, 8vh, 84px); padding: 18px 44px; border: 1px solid rgba(236, 230, 216, .35); font-size: 11px; letter-spacing: .34em; text-transform: uppercase; animation-delay: 3.4s; transition: background .6s var(--ease), color .6s, border-color .6s; }
 .enter:hover { background: var(--ivory); color: #000; border-color: var(--ivory); }
-.skip-intro { display: block; margin-top: 26px; font-size: 11px; letter-spacing: .2em; color: var(--muted); animation-delay: 3.9s; transition: color .4s; }
+.skip-intro { display: block; margin-top: 26px; font-size: 11px; letter-spacing: .2em; color: var(--soft); animation-delay: 3.9s; transition: color .4s; }
 .skip-intro:hover { color: var(--ivory); }
 @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 
