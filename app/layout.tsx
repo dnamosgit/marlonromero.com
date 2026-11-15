@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description: 'An immersive exhibition of paintings by Marlon Romero, Peruvian painter and visionary environmental artist from Pucallpa, near the Amazon rainforest.',
   openGraph: { type: 'website', siteName: 'Marlon Romero', title: 'Marlon Romero — The Worlds Within' },
 };
-export const viewport: Viewport = { themeColor: '#f3efe7', width: 'device-width', initialScale: 1, viewportFit: 'cover' };
+export const viewport: Viewport = { themeColor: '#0a0912', width: 'device-width', initialScale: 1, viewportFit: 'cover' };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

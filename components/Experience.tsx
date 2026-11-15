@@ -9,6 +9,7 @@ import { fitWorld, isPortrait, nearestIndex, pathLength, progressFor } from '@/l
 import type { Rig, StageHandle } from './Stage';
 import ArtImage from './ArtImage';
 import Inspector from './Inspector';
+import Mandala from './Mandala';
 
 const Stage = dynamic(() => import('./Stage'), { ssr: false }); // WebGL is fetched separately, never in the first load
 
@@ -168,35 +169,25 @@ export default function Experience() {
       {/* ---------- Opening ---------- */}
       {phase === 'opening' && (
         <section className="opening" ref={opening} aria-label="Introduction">
-          {/* The painting is shown whole, as large as the screen allows. Where the screen is a different shape,
-              its own colours, heavily diffused, fill the rest so the edges blend. */}
-          {openingArt?.src && <div className="opening-blur" style={{ backgroundImage: `url(${openingArt.src})` }} aria-hidden />}
-          {openingArt?.src && (
-            <div className="opening-art" style={{ ['--ar' as string]: openingArt.w / openingArt.h }}>
-              <ArtImage art={openingArt} eager sizes="100vw" />
-            </div>
-          )}
+          <div className="opening-art">{openingArt?.src && <ArtImage art={openingArt} eager sizes="90vw" />}</div>
           <div className="opening-text">
-            <div>
-              <h1>{SITE.name}</h1>
-              <p className="opening-sub">The Worlds Within</p>
-            </div>
-            <div className="opening-actions">
-              <button type="button" className="enter" onClick={enter}>Enter experience</button>
-              <Link className="skip-intro" href="/collection/">Skip to the collection</Link>
-            </div>
+            <h1>{SITE.name}</h1>
+            <p className="opening-sub">The Worlds Within</p>
+            <span className="beads" aria-hidden />
+            <button type="button" className="enter" onClick={enter} autoFocus>Enter experience</button>
+            <Link className="skip-intro" href="/collection/">Skip — go to the collection</Link>
           </div>
         </section>
       )}
 
       {/* ---------- Persistent, discreet controls ---------- */}
       {phase !== 'opening' && (
-        <header className={`xp-top chrome ${phase === 'hub' || menu || lite ? 'light' : ''}`}>
+        <header className="xp-top chrome">
           <button type="button" className="xp-brand" onClick={() => (phase === 'world' ? travel(null) : undefined)} aria-label={`${SITE.name} — return to the index`}>{SITE.name}</button>
           <button type="button" className="xp-menu-btn" aria-expanded={menu} onClick={() => setMenu((m) => !m)}>{menu ? 'Close' : 'Menu'}</button>
         </header>
       )}
-      <nav className={`xp-menu light ${menu ? 'open' : ''}`} aria-label="Experience" aria-hidden={!menu}>
+      <nav className={`xp-menu ${menu ? 'open' : ''}`} aria-label="Experience" aria-hidden={!menu}>
         {WORLDS.map((w) => (
           <button type="button" key={w.key} tabIndex={menu ? 0 : -1} onClick={() => travel(w.key)} aria-current={w.key === worldKey || undefined}>
             <small>{w.numeral}</small>{w.name}
@@ -209,7 +200,8 @@ export default function Experience() {
 
       {/* ---------- The index: four worlds as a contents page, with the work itself as the preview ---------- */}
       {phase === 'hub' && (
-        <section className={`hub light ${leaving ? 'leaving' : ''}`} aria-label="Choose a world">
+        <section className={`hub ${leaving ? 'leaving' : ''}`} aria-label="Choose a world">
+          <Mandala className="hub-mandala" />
           <div className="specks" aria-hidden>
             {Array.from({ length: 18 }, (_, i) => {
               const size = 4 + ((i * 7) % 6), edge = 1 + ((i * 37) % 11);
@@ -276,7 +268,7 @@ export default function Experience() {
 
       {/* ---------- Plain presentation: reduced motion or no WebGL ---------- */}
       {phase === 'world' && world && lite && (
-        <section className="lite light">
+        <section className="lite">
           <p className="label">{world.numeral} — {world.line}</p>
           <h2>{world.name}</h2>
           {arts.map((a, i) => (

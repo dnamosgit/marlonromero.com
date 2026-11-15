@@ -28,14 +28,13 @@ export const CATEGORIES: { key: CategoryKey; label: string }[] = [
   { key: 'murals', label: 'Murals' },
 ];
 
-/* PENDING — replace with the real paintings (files go in /public/art). */
+/* Entries with an empty src are PENDING — replace with the real paintings (files go in /public/art). */
 export const ARTWORKS: Artwork[] = [
-  { id: 'l1', category: 'landscapes', src: '', w: 1600, h: 1000 },
-  { id: 'l2', category: 'landscapes', src: '', w: 1200, h: 1500 },
-  { id: 'l3', category: 'landscapes', src: '', w: 1600, h: 1200 },
-  { id: 'l4', category: 'landscapes', src: '', w: 1800, h: 900 },
-  { id: 'l5', category: 'landscapes', src: '', w: 1200, h: 1200 },
-  { id: 'v1', category: 'visionary', src: '/art/visionary-01.jpg', w: 1024, h: 770 }, // real painting; title and details PENDING
+  { id: 'l1', category: 'landscapes', src: '/art/el-achuni.jpg', w: 1426, h: 1068, title: 'El Achuni', medium: 'Acrylic on canvas', size: '28 × 18 in', description: 'Sold.' },
+  { id: 'l2', category: 'landscapes', src: '/art/landscape-lake.jpg', w: 1990, h: 1500 },   // title and details PENDING
+  { id: 'l3', category: 'landscapes', src: '/art/landscape-sunset.jpg', w: 1396, h: 1060 }, // title and details PENDING (small source photo, enlarged)
+  { id: 'l4', category: 'landscapes', src: '/art/macaw.jpg', w: 1068, h: 1424 },            // title and details PENDING (small source photo, enlarged)
+  { id: 'v1', category: 'visionary', src: '/art/visionary-01.jpg', w: 1448, h: 1084 },      // title and details PENDING
   { id: 'v2', category: 'visionary', src: '', w: 1600, h: 1100 },
   { id: 'v3', category: 'visionary', src: '', w: 1300, h: 1300 },
   { id: 'v4', category: 'visionary', src: '', w: 1100, h: 1500 },
@@ -135,15 +134,18 @@ export const artName = (a: Artwork) => a.title || 'Untitled entry';
 export const artMeta = (a: Artwork) => [a.medium, a.size, a.year].filter(Boolean).join(' · ');
 
 /* The artist's story — written only from verified facts. */
-export const CHAPTERS: { numeral: string; title: string; text: string; art: string }[] = [
-  { numeral: 'I', title: 'Pucallpa', art: 'l1',
-    text: 'Marlon Romero is a painter from Peru. He was born in Pucallpa, a city near the Amazon rainforest.' },
-  { numeral: 'II', title: 'The rainforest', art: 'l3',
-    text: 'He is a visionary and environmental artist, and the landscapes of the Amazon rainforest are a central subject of his paintings.' },
-  { numeral: 'III', title: 'Formation', art: 's1',
-    text: 'Both self-taught and trained, he works primarily in oil and acrylic, developing a practice that moves between landscape, still life, murals and visionary painting.' },
-  { numeral: 'IV', title: 'Belief', art: 'v1',
-    text: 'His visionary work explores indigenous and mestizo religious belief systems, spirituality and Peruvian culture — the meeting of nature, imagination and the human experience.' },
-  { numeral: 'V', title: 'Beyond the forest', art: 'm1',
-    text: 'His work has been presented in museums, galleries, conservation programs and international exhibitions, and his paintings have been featured and sold internationally.' },
+export const CHAPTERS: { numeral: string; title: string; text: string[]; art: string }[] = [
+  { numeral: 'I', title: 'About the artist', art: 'v1', text: [
+    'Marlon was born in Pucallpa, Peru, the base of the Amazon rainforest jungle, and has lived in San Francisco for the last 12 years. His paintings give insights into the Amazon life of Peru, Costa Rica and San Francisco.',
+    'Marlon has developed a method of painting nature that is healing and transcendent. His “visions” of the world reveal part reality and part mythology.' ] },
+  { numeral: 'II', title: 'The paintings', art: 'l2', text: [
+    'He enjoys painting with vibrant colors in acrylic, oil and watercolor and uses great detail to translate the beauty of the Amazon and the Costa Rican jungle into images. His colors combine his love for traditional plant medicine and nature.',
+    'The paintings reflect his own life experiences, spiritual world and insights into the indigenous and mestizo beliefs. Combining his love of painting and nature, his vast portfolio includes paintings of realistic landscapes of the rainforest, still life, landscapes of the Bay Area and detailed stories about healing from traditional plant medicine.' ] },
+  { numeral: 'III', title: 'Previous expositions', art: 'l1', text: [
+    'Marlon has presented his paintings around the world in museums, galleries and conservation programs. His paintings have been featured and sold in Peru, Costa Rica, Brazil, Norway, Finland and the U.S.',
+    'His latest exhibits in the U.S. include the San Francisco Peruvian Consulate (CA) (2007, 2009 and 2015), San Francisco North Beach Art in the Alley (CA) (juried, 2006), San Francisco Mission Cultural Center (CA), Evanston Ethnic Art Festival (IL) (juried) and the Women’s Building at the University of San Francisco (CA) (2016).',
+    'He has completed large murals at the Tenderloin Family Housing Center and at hotels in the Bay Area, Costa Rica and Peru. Marlon’s paintings have been purchased by private collectors, including high-level Peruvian government officials.' ] },
+  { numeral: 'IV', title: 'Education', art: 'l4', text: [
+    'Marlon is self-taught and began painting when he was 6 years old, when he was recruited to come paint with the famous Don Pablo Amaringo from the USKO Ayar School of Painting in Pucallpa, Peru.',
+    'He was also a resident artist in the Osa Peninsula, Costa Rica, and taught art to children in Pucallpa, Peru, and in Costa Rica. Since coming to the Bay Area, he has studied with several well-known master teachers and artists throughout the Bay Area.' ] },
 ];

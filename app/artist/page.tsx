@@ -3,11 +3,12 @@ import Link from 'next/link';
 import SiteNav from '@/components/SiteNav';
 import ArtImage from '@/components/ArtImage';
 import Reveal from '@/components/Reveal';
+import Mandala from '@/components/Mandala';
 import { CHAPTERS, SITE, artById } from '@/lib/data';
 
 export const metadata: Metadata = {
   title: 'The Artist',
-  description: 'Marlon Romero — painter from Pucallpa, Peru. A visionary and environmental artist working in oil and acrylic.',
+  description: 'Marlon Romero — painter born in Pucallpa, Peru, at the base of the Amazon rainforest, and based in San Francisco.',
 };
 
 export default function Artist() {
@@ -17,10 +18,11 @@ export default function Artist() {
       <SiteNav current="artist" />
       <main className="story">
         <section className="chapter intro">
+          <Mandala className="page-mandala" />
           <Reveal>
             <p className="label">The Artist</p>
             <h1>Marlon Romero</h1>
-            <p className="label">Painter · Peru</p>
+            <p className="label">Pucallpa, Peru · San Francisco</p>
           </Reveal>
         </section>
         {CHAPTERS.map((ch, i) => {
@@ -33,7 +35,8 @@ export default function Artist() {
               <Reveal className="chapter-text">
                 <p className="chapter-num">{ch.numeral}</p>
                 <h2>{ch.title}</h2>
-                <p>{ch.text}</p>
+                <span className="beads" aria-hidden />
+                {ch.text.map((t) => <p key={t}>{t}</p>)}
               </Reveal>
             </section>
           );
