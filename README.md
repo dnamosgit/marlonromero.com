@@ -1,4 +1,4 @@
-# Marlon Romero Gomez — The Worlds Within
+# Marlon Romero — The Worlds Within
 
 An immersive exhibition of the artist's paintings, plus a plain, fully accessible archive.
 
@@ -40,6 +40,7 @@ file show a neutral "Image pending" tile. Contact details and the story chapters
 | `/collection/` | Complete archive, filterable (`?c=landscapes`), no WebGL required |
 | `/collection/<id>/` | Shareable page for each painting, with zoom and inspection |
 | `/artist/` | The artist's story in chapters |
+| `/jewelry-bags/` | Jewelry and bags, filterable, with a page per piece (`OBJECTS` in `lib/data.ts`, files in `public/objects/`) |
 
 | Component | Role |
 | --- | --- |

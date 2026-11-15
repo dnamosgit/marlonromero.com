@@ -9,11 +9,11 @@ const sans = Inter({ subsets: ['latin'], weight: ['300', '400'], variable: '--fo
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
-  title: { default: 'Marlon Romero Gomez — The Worlds Within', template: '%s — Marlon Romero Gomez' },
-  description: 'An immersive exhibition of paintings by Marlon Romero Gomez, Peruvian painter and visionary environmental artist from Pucallpa, near the Amazon rainforest.',
-  openGraph: { type: 'website', siteName: 'Marlon Romero Gomez', title: 'Marlon Romero Gomez — The Worlds Within' },
+  title: { default: 'Marlon Romero — The Worlds Within', template: '%s — Marlon Romero' },
+  description: 'An immersive exhibition of paintings by Marlon Romero, Peruvian painter and visionary environmental artist from Pucallpa, near the Amazon rainforest.',
+  openGraph: { type: 'website', siteName: 'Marlon Romero', title: 'Marlon Romero — The Worlds Within' },
 };
-export const viewport: Viewport = { themeColor: '#0a0912', width: 'device-width', initialScale: 1, viewportFit: 'cover' };
+export const viewport: Viewport = { themeColor: '#f3efe7', width: 'device-width', initialScale: 1, viewportFit: 'cover' };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

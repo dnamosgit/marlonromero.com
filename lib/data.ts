@@ -6,7 +6,7 @@
    empty values are simply not rendered.
 ------------------------------------------------------------------- */
 
-export type CategoryKey = 'landscapes' | 'visionary' | 'still-life' | 'murals';
+export type CategoryKey = 'landscapes' | 'visionary' | 'still-life' | 'murals' | 'jewelry' | 'bags';
 
 export type Artwork = {
   id: string;            // used in the shareable URL: /collection/<id>/
@@ -50,7 +50,23 @@ export const ARTWORKS: Artwork[] = [
   { id: 'm4', category: 'murals', src: '', w: 1800, h: 1000 },
 ];
 
+/* Jewelry and bags. PENDING — replace with the real pieces (files go in /public/objects).
+   Same fields as a painting: src, pixel w/h, and optionally title, year, medium (materials), size, description. */
+export const OBJECT_CATEGORIES: { key: CategoryKey; label: string }[] = [
+  { key: 'jewelry', label: 'Jewelry' },
+  { key: 'bags', label: 'Bags' },
+];
+export const OBJECTS: Artwork[] = [
+  { id: 'j1', category: 'jewelry', src: '', w: 1200, h: 1200 },
+  { id: 'j2', category: 'jewelry', src: '', w: 1200, h: 1500 },
+  { id: 'j3', category: 'jewelry', src: '', w: 1200, h: 1200 },
+  { id: 'b1', category: 'bags', src: '', w: 1200, h: 1400 },
+  { id: 'b2', category: 'bags', src: '', w: 1400, h: 1200 },
+  { id: 'b3', category: 'bags', src: '', w: 1200, h: 1200 },
+];
+
 export const SITE = {
+  name: 'Marlon Romero',
   url: 'https://www.marlonromero.com',
   openingArt: 'v1',                // painting revealed in the opening
   /* PENDING — verified contact details from the original site. */
@@ -110,17 +126,18 @@ export const WORLDS: World[] = [
 ];
 
 export const worldByKey = (k: string | null) => WORLDS.find((w) => w.key === k) ?? null;
-export const worldOf = (a: Artwork) => WORLDS.find((w) => w.category === a.category)!;
+export const worldOf = (a: Artwork) => WORLDS.find((w) => w.category === a.category);
 export const artsOf = (c: CategoryKey) => ARTWORKS.filter((a) => a.category === c);
 export const artById = (id: string) => ARTWORKS.find((a) => a.id === id) ?? null;
-export const catLabel = (c: CategoryKey) => CATEGORIES.find((x) => x.key === c)!.label;
+export const objectById = (id: string) => OBJECTS.find((a) => a.id === id) ?? null;
+export const catLabel = (c: CategoryKey) => [...CATEGORIES, ...OBJECT_CATEGORIES].find((x) => x.key === c)!.label;
 export const artName = (a: Artwork) => a.title || 'Untitled entry';
 export const artMeta = (a: Artwork) => [a.medium, a.size, a.year].filter(Boolean).join(' · ');
 
 /* The artist's story — written only from verified facts. */
 export const CHAPTERS: { numeral: string; title: string; text: string; art: string }[] = [
   { numeral: 'I', title: 'Pucallpa', art: 'l1',
-    text: 'Marlon Romero Gomez is a painter from Peru. He was born in Pucallpa, a city near the Amazon rainforest.' },
+    text: 'Marlon Romero is a painter from Peru. He was born in Pucallpa, a city near the Amazon rainforest.' },
   { numeral: 'II', title: 'The rainforest', art: 'l3',
     text: 'He is a visionary and environmental artist, and the landscapes of the Amazon rainforest are a central subject of his paintings.' },
   { numeral: 'III', title: 'Formation', art: 's1',

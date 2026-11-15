@@ -9,7 +9,6 @@ import { fitWorld, isPortrait, nearestIndex, pathLength, progressFor } from '@/l
 import type { Rig, StageHandle } from './Stage';
 import ArtImage from './ArtImage';
 import Inspector from './Inspector';
-import Mandala from './Mandala';
 
 const Stage = dynamic(() => import('./Stage'), { ssr: false }); // WebGL is fetched separately, never in the first load
 
@@ -26,6 +25,9 @@ export default function Experience() {
   const [inspect, setInspect] = useState(false);
   const [idle, setIdle] = useState(false);
   const [portrait, setPortrait] = useState(false);
+  // which world the index is previewing: start on one that has a real painting
+  const [pick, setPick] = useState(() => Math.max(0, WORLDS.findIndex((w) => artsOf(w.category)[0]?.src)));
+  const [leaving, setLeaving] = useState(false);
   const portraitRef = useRef(false);
   const stage = useRef<StageHandle | null>(null);
   const rig = useRef<Rig>({ target: 0, focus: -1, snap: false, mx: 0, my: 0 });
@@ -49,7 +51,7 @@ export default function Experience() {
     const raw = worldByKey(key), w = raw ? fitWorld(raw, portraitRef.current) : null, list = w ? artsOf(w.category) : [];
     const f = artId ? list.findIndex((a) => a.id === artId) : -1;
     rig.current.focus = f; rig.current.snap = true;
-    setWorldKey(w ? w.key : null); setFocus(f); setPhase(w ? 'world' : 'hub'); setMenu(false); setInspect(false);
+    setLeaving(false); setWorldKey(w ? w.key : null); setFocus(f); setPhase(w ? 'world' : 'hub'); setMenu(false); setInspect(false);
     setProgress(w && f >= 0 ? progressFor(w, list.length, f) : 0);
   }, [setProgress]);
 
@@ -58,6 +60,7 @@ export default function Experience() {
     const fromArt = from ? veilOf(from, Math.max(0, rig.current.focus)) : null;
     const apply = () => { show(key); history.pushState(null, '', key ? `/?w=${key}` : '/'); };
     setMenu(false);
+    if (!from && to) setLeaving(true); // the index fades away to reveal the transition beneath it
     if (stage.current && !lite) stage.current.veil(apply, fromArt, to ? veilOf(to) : fromArt); else apply();
   }, [worldKey, lite, show]);
 
@@ -165,25 +168,35 @@ export default function Experience() {
       {/* ---------- Opening ---------- */}
       {phase === 'opening' && (
         <section className="opening" ref={opening} aria-label="Introduction">
-          <div className="opening-art">{openingArt?.src && <ArtImage art={openingArt} eager sizes="90vw" />}</div>
+          {/* The painting is shown whole, as large as the screen allows. Where the screen is a different shape,
+              its own colours, heavily diffused, fill the rest so the edges blend. */}
+          {openingArt?.src && <div className="opening-blur" style={{ backgroundImage: `url(${openingArt.src})` }} aria-hidden />}
+          {openingArt?.src && (
+            <div className="opening-art" style={{ ['--ar' as string]: openingArt.w / openingArt.h }}>
+              <ArtImage art={openingArt} eager sizes="100vw" />
+            </div>
+          )}
           <div className="opening-text">
-            <h1>Marlon Romero Gomez</h1>
-            <p className="opening-sub">The Worlds Within</p>
-            <span className="beads" aria-hidden />
-            <button type="button" className="enter" onClick={enter} autoFocus>Enter experience</button>
-            <Link className="skip-intro" href="/collection/">Skip — go to the collection</Link>
+            <div>
+              <h1>{SITE.name}</h1>
+              <p className="opening-sub">The Worlds Within</p>
+            </div>
+            <div className="opening-actions">
+              <button type="button" className="enter" onClick={enter}>Enter experience</button>
+              <Link className="skip-intro" href="/collection/">Skip to the collection</Link>
+            </div>
           </div>
         </section>
       )}
 
       {/* ---------- Persistent, discreet controls ---------- */}
       {phase !== 'opening' && (
-        <header className="xp-top chrome">
-          <button type="button" className="xp-brand" onClick={() => (phase === 'world' ? travel(null) : undefined)} aria-label="Marlon Romero Gomez — return to the gateways">MRG</button>
+        <header className={`xp-top chrome ${phase === 'hub' || menu || lite ? 'light' : ''}`}>
+          <button type="button" className="xp-brand" onClick={() => (phase === 'world' ? travel(null) : undefined)} aria-label={`${SITE.name} — return to the index`}>{SITE.name}</button>
           <button type="button" className="xp-menu-btn" aria-expanded={menu} onClick={() => setMenu((m) => !m)}>{menu ? 'Close' : 'Menu'}</button>
         </header>
       )}
-      <nav className={`xp-menu ${menu ? 'open' : ''}`} aria-label="Experience" aria-hidden={!menu}>
+      <nav className={`xp-menu light ${menu ? 'open' : ''}`} aria-label="Experience" aria-hidden={!menu}>
         {WORLDS.map((w) => (
           <button type="button" key={w.key} tabIndex={menu ? 0 : -1} onClick={() => travel(w.key)} aria-current={w.key === worldKey || undefined}>
             <small>{w.numeral}</small>{w.name}
@@ -191,31 +204,36 @@ export default function Experience() {
         ))}
         <Link href="/artist/" tabIndex={menu ? 0 : -1}><small>V</small>The Artist</Link>
         <Link href="/collection/" tabIndex={menu ? 0 : -1}><small>VI</small>The Collection</Link>
+        <Link href="/jewelry-bags/" tabIndex={menu ? 0 : -1}><small>VII</small>Jewelry &amp; Bags</Link>
       </nav>
 
-      {/* ---------- Gateways ---------- */}
+      {/* ---------- The index: four worlds as a contents page, with the work itself as the preview ---------- */}
       {phase === 'hub' && (
-        <section className="hub" aria-label="Choose a world">
-          <Mandala className="hub-mandala" />
-          <span className="orb o1" aria-hidden /><span className="orb o2" aria-hidden /><span className="orb o3" aria-hidden />
-          <p className="label hub-title">The Worlds Within</p>
-          <div className="portals">
-            {WORLDS.map((w, i) => {
-              const a = artsOf(w.category)[0];
-              return (
-                <button type="button" key={w.key} className="portal" style={{ ['--d' as string]: i, ['--glow' as string]: w.glow, ['--mote' as string]: w.mote }} onClick={() => travel(w.key)}>
-                  <span className="portal-arch">
-                    {/* Colour drawn from the painting, heavily diffused: an environmental layer, not the artwork itself. */}
-                    {a?.src ? <span className="portal-wash" style={{ backgroundImage: `url(${a.src})` }} /> : <span className="portal-wash empty" />}
-                  </span>
-                  <span className="portal-num">{w.numeral}</span>
-                  <span className="portal-name">{w.name}</span>
-                  <span className="portal-line">{w.line}</span>
-                </button>
-              );
+        <section className={`hub light ${leaving ? 'leaving' : ''}`} aria-label="Choose a world">
+          <div className="specks" aria-hidden>
+            {Array.from({ length: 18 }, (_, i) => {
+              const size = 4 + ((i * 7) % 6), edge = 1 + ((i * 37) % 11);
+              return <span key={i} style={{ width: size, height: size, top: `${6 + ((i * 53) % 88)}%`, [i % 2 ? 'right' : 'left']: `${edge}%`,
+                background: ['#5b508d', '#b15426', '#5aaf3e', '#1876af', '#a97d2d'][i % 5], animationDuration: `${11 + (i % 7) * 2}s`, animationDelay: `${-i * 1.3}s` }} />;
             })}
           </div>
-          <p className="hub-links"><Link href="/artist/">The Artist</Link><Link href="/collection/">The Collection</Link></p>
+          <div className="hub-list">
+            <p className="label">The Worlds Within</p>
+            {WORLDS.map((w, i) => (
+              <button type="button" key={w.key} className={`hub-row ${i === pick ? 'on' : ''}`} onMouseEnter={() => setPick(i)} onFocus={() => setPick(i)} onClick={() => travel(w.key)}>
+                <span className="hub-num">{w.numeral}</span>
+                <span className="hub-name">{w.name}</span>
+                <span className="hub-line">{w.line}</span>
+              </button>
+            ))}
+            <p className="hub-links"><Link href="/artist/">The Artist</Link><Link href="/collection/">The Collection</Link><Link href="/jewelry-bags/">Jewelry &amp; Bags</Link></p>
+          </div>
+          <div className="hub-preview" aria-hidden>
+            {WORLDS.map((w, i) => {
+              const a = artsOf(w.category)[0];
+              return <div key={w.key} className={`hub-frame ${i === pick ? 'on' : ''}`}>{a && <ArtImage art={a} eager={i === 0} sizes="(max-width: 900px) 90vw, 48vw" />}</div>;
+            })}
+          </div>
         </section>
       )}
 
@@ -258,7 +276,7 @@ export default function Experience() {
 
       {/* ---------- Plain presentation: reduced motion or no WebGL ---------- */}
       {phase === 'world' && world && lite && (
-        <section className="lite">
+        <section className="lite light">
           <p className="label">{world.numeral} — {world.line}</p>
           <h2>{world.name}</h2>
           {arts.map((a, i) => (

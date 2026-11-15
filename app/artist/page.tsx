@@ -3,12 +3,11 @@ import Link from 'next/link';
 import SiteNav from '@/components/SiteNav';
 import ArtImage from '@/components/ArtImage';
 import Reveal from '@/components/Reveal';
-import Mandala from '@/components/Mandala';
 import { CHAPTERS, SITE, artById } from '@/lib/data';
 
 export const metadata: Metadata = {
   title: 'The Artist',
-  description: 'Marlon Romero Gomez — painter from Pucallpa, Peru. A visionary and environmental artist working in oil and acrylic.',
+  description: 'Marlon Romero — painter from Pucallpa, Peru. A visionary and environmental artist working in oil and acrylic.',
 };
 
 export default function Artist() {
@@ -18,10 +17,9 @@ export default function Artist() {
       <SiteNav current="artist" />
       <main className="story">
         <section className="chapter intro">
-          <Mandala className="page-mandala" />
           <Reveal>
             <p className="label">The Artist</p>
-            <h1>Marlon Romero <em>Gomez</em></h1>
+            <h1>Marlon Romero</h1>
             <p className="label">Painter · Peru</p>
           </Reveal>
         </section>
@@ -35,7 +33,6 @@ export default function Artist() {
               <Reveal className="chapter-text">
                 <p className="chapter-num">{ch.numeral}</p>
                 <h2>{ch.title}</h2>
-                <span className="beads" aria-hidden />
                 <p>{ch.text}</p>
               </Reveal>
             </section>
@@ -44,7 +41,7 @@ export default function Artist() {
         <section className="chapter outro">
           <Reveal>
             <h2>Enter the work</h2>
-            <p className="outro-links"><Link className="text-link" href="/">The Experience</Link><Link className="text-link" href="/collection/">The Collection</Link></p>
+            <p className="outro-links"><Link className="text-link" href="/">The Experience</Link><Link className="text-link" href="/collection/">The Collection</Link><Link className="text-link" href="/jewelry-bags/">Jewelry &amp; Bags</Link></p>
             {(c.email || c.instagram || c.facebook) && (
               <p className="contact-line">
                 {c.email && <a href={`mailto:${c.email}`}>{c.email}</a>}

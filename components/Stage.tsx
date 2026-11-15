@@ -218,7 +218,10 @@ function Veil({ api }: { api: MutableRefObject<VeilApi | null> }) {
     return () => { api.current = null; };
   }, [api]);
 
-  useFrame((s) => { const u = mat.current.uniforms; u.uTime.value = s.clock.elapsedTime; u.uViewAspect.value = size.width / size.height; });
+  useFrame((s) => {
+    const u = mat.current.uniforms; u.uTime.value = s.clock.elapsedTime; u.uViewAspect.value = size.width / size.height;
+    if (u.uTex.value && u.uHas.value === 0 && u.uTex.value.userData.ready && mesh.current.visible) u.uHas.value = 1; // painting finished loading mid-transition
+  });
 
   return (
     <mesh ref={mesh} visible={false} frustumCulled={false} renderOrder={1000}>
