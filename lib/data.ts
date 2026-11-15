@@ -34,9 +34,12 @@ export const ARTWORKS: Artwork[] = [
   { id: 'l2', category: 'landscapes', src: '/art/landscape-lake.jpg', w: 1990, h: 1500 },   // title and details PENDING
   { id: 'l3', category: 'landscapes', src: '/art/landscape-sunset.jpg', w: 1396, h: 1060 }, // title and details PENDING (small source photo, enlarged)
   { id: 'l4', category: 'landscapes', src: '/art/macaw.jpg', w: 1068, h: 1424 },            // title and details PENDING (small source photo, enlarged)
+  { id: 'l5', category: 'landscapes', src: '/art/landscape-moon.jpg', w: 2000, h: 1500 },         // title and details PENDING (signed and dated 6-6-09)
+  { id: 'l6', category: 'landscapes', src: '/art/macaws-waterfall.jpg', w: 1466, h: 2000 },       // title and details PENDING
+  { id: 'l7', category: 'landscapes', src: '/art/macaws-forest.jpg', w: 1500, h: 2000 },          // title and details PENDING
   { id: 'v1', category: 'visionary', src: '/art/visionary-01.jpg', w: 1448, h: 1084 },      // title and details PENDING
-  { id: 'v2', category: 'visionary', src: '', w: 1600, h: 1100 },
-  { id: 'v3', category: 'visionary', src: '', w: 1300, h: 1300 },
+  { id: 'v2', category: 'visionary', src: '/art/visionary-orchid.jpg', w: 1360, h: 1790 },  // title and details PENDING
+  { id: 'v3', category: 'visionary', src: '/art/visionary-painter.jpg', w: 1099, h: 1482 }, // title and details PENDING
   { id: 'v4', category: 'visionary', src: '', w: 1100, h: 1500 },
   { id: 'v5', category: 'visionary', src: '', w: 1700, h: 1000 },
   { id: 's1', category: 'still-life', src: '', w: 1200, h: 1400 },
